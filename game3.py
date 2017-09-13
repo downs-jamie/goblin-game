@@ -39,7 +39,7 @@ hero_image = pygame.image.load('images/hero.png')
 goblin_image = pygame.image.load('images/goblin.png')
 monster_image = pygame.image.load('images/monster.png')
 acorn_image = pygame.image.load('acorn.png')
-screen = pygame.mixer.music.load('images/sounds/08 Intermission.mp3')
+screen = pygame.mixer.music.load('images/sounds/11 The Blue Nun.Mp3')
 pygame.mixer.music.play(-1, 0.0)
 
 
@@ -54,13 +54,13 @@ hero = {
 goblin = {
 	"x": 400,
 	"y": 200,
-	"speed": 2
+	"speed": 4
 }
 
 monster = {
 	"x": 200,
 	"y": 300,
-	"speed": 1,
+	"speed": 3,
 	"dx": 1,
 	"dy": 1,
 	
@@ -146,8 +146,10 @@ while game_on:
 	dx = goblin['x'] - hero['x']
 	dy = goblin['y'] - hero['y']
 	dist = hypot(dx,dy)
+
 	dx = dx / dist
 	dy = dy / dist
+
 	goblin['x'] -= dx * goblin['speed']
 	goblin['y'] -= dy * goblin['speed']
 	
@@ -172,9 +174,25 @@ while game_on:
 	if tick % 20 == 0:
 		monster['dx'] = randint(-1,1)
 		monster['dy'] = randint(-1,1)
+	if monster['x'] > 0:
+	
+		monster['x'] += monster['dx'] * monster['speed']
 
-	monster['x'] += monster['dx'] * monster['speed']
-	monster['y'] += monster['dy'] * monster['speed']	
+	elif monster['x'] > 400:
+
+		monster['x'] += monster['speed']
+
+	if monster['y'] > 0:
+
+		monster['y'] += monster['dy'] * monster['speed']
+
+	elif monster['y'] > 400:
+
+		monster['y'] += monster['speed']
+	
+		
+		
+			
 	# update
 	all_sprites.update()
 	
@@ -182,6 +200,12 @@ while game_on:
 	# COLLISION DETECTION!!!
 	distance_between = fabs(hero['x'] - goblin['x']) + fabs(hero['y'] - goblin['y'])
 	if distance_between < 32:
+		print "collision!"
+	
+
+	distance_between = fabs(hero['x'] - monster['x']) + fabs(hero['y'] - monster['y'])
+	if distance_between < 32:
+		hero['wins'] += 1
 		# the hero and goblin are touching!
 		print "collision!"
 
